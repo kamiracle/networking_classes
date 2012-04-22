@@ -22,9 +22,9 @@
 int main(int argc, const char * argv[])
 {
 
-    int n, sockfd;
-    short inPort = 666;
-    char buffer[BUFSIZE + 1];
+    int sockfd;
+    short inPort = 12345;
+    char buffer[20] = "Hello server";
     struct sockaddr_in serverAddress;
     
     if ( argc < 2 ) {
@@ -41,7 +41,8 @@ int main(int argc, const char * argv[])
         printf("Successful call of socket()\n");
     }
         
-    bzero(&serverAddress, sizeof(serverAddress));
+    //bzero(&serverAddress, sizeof(serverAddress));
+    memset(&serverAddress, 0, sizeof(serverAddress));
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(inPort);
     
@@ -54,14 +55,9 @@ int main(int argc, const char * argv[])
         exit(1);
     }
     
-    while ( (n = read( sockfd, buffer, 200)) > 0 ) {
-        buffer[n] = 0;
-        printf("%s",buffer);
+    if ( write( sockfd, buffer, 20) < 0) {
+        perror("write");
+        exit(1);
     }
-    
-    
-    
-    
-    
 }
 
